@@ -37,13 +37,13 @@ function savetoCrud(event){
     const obj = {
         name,email
     }
-    axios.post('https://crudcrud.com/api/9832b27910164463b7643c3ea2bb735b/appointmentData',obj) 
+    axios.post('https://crudcrud.com/api/050e0311cd194641ba8688b7135f393d/appointmentData',obj) 
     .then(response => console.log(response.data)
     ).catch(error => console.log(error))
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    axios.get('https://crudcrud.com/api/9832b27910164463b7643c3ea2bb735b/appointmentData')
+    axios.get('https://crudcrud.com/api/050e0311cd194641ba8688b7135f393d/appointmentData')
     .then(
         response => {
             for(let i =0;i<response.data.length;i++){
@@ -53,14 +53,28 @@ window.addEventListener("DOMContentLoaded", () => {
     ).catch(err => console.log(err))
 })
 
-function showUsers(user){
+function showUsers(user){ 
     const list = document.getElementById("listOfUsers")
     const node =
-    `<li id=${user.email}> ${user.name} - ${user.email}
-    <button> Delete </button>
+    `<li id=${user._id}> ${user.name} - ${user.email}
+    <button onclick=removeItems('${user._id}')> Delete </button>
     <button> Edit </button></li>`
+    list.innerHTML = list.innerHTML + node
+}
 
-list.innerHTML = list.innerHTML + node
+function removeItems(userID) {
+  axios.delete(`https://crudcrud.com/api/050e0311cd194641ba8688b7135f393d/appointmentData/${userID}`)
+  .then(response => {
+      removeUserFromScreen(userID)
+  }).catch(err => console.log(err))
+}
+
+function removeUserFromScreen(userID) {
+  const parentNode = document.getElementById("users");
+  const childNodeToDelete = document.getElementById(userID);
+  if (childNodeToDelete) {
+    parentNode.removeChild(childNodeToDelete[0]);
+  }
 }
 </script>
 </html>
