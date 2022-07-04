@@ -22,28 +22,30 @@
             <input type="email" name="email" id="email"><br /><br />
             <button type="submit" id="button">Submit</button>
        </form>
-       <ul id="listOfUsers"></ul>
+       <ul id="users"></ul>
     </div>
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
+
 <script>
 
 function savetoCrud(event){
     event.preventDefault();
     const name = event.target.name.value
     const email= event.target.email.value
+    let url = ""
 
     const obj = {
         name,email
     }
-    axios.post('https://crudcrud.com/api/050e0311cd194641ba8688b7135f393d/appointmentData',obj) 
+    axios.post('https://crudcrud.com/api/bba6392c5cd442b591f5d1536c0f8940/appointmentData',obj) 
     .then(response => console.log(response.data)
     ).catch(error => console.log(error))
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    axios.get('https://crudcrud.com/api/050e0311cd194641ba8688b7135f393d/appointmentData')
+    axios.get('https://crudcrud.com/api/bba6392c5cd442b591f5d1536c0f8940/appointmentData')
     .then(
         response => {
             for(let i =0;i<response.data.length;i++){
@@ -54,7 +56,7 @@ window.addEventListener("DOMContentLoaded", () => {
 })
 
 function showUsers(user){ 
-    const list = document.getElementById("listOfUsers")
+    const list = document.getElementById("users")
     const node =
     `<li id=${user._id}> ${user.name} - ${user.email}
     <button onclick=removeItems('${user._id}')> Delete </button>
@@ -63,7 +65,7 @@ function showUsers(user){
 }
 
 function removeItems(userID) {
-  axios.delete(`https://crudcrud.com/api/050e0311cd194641ba8688b7135f393d/appointmentData/${userID}`)
+  axios.delete(`https://crudcrud.com/api/bba6392c5cd442b591f5d1536c0f8940/appointmentData/${userID}`)
   .then(response => {
       removeUserFromScreen(userID)
   }).catch(err => console.log(err))
@@ -73,7 +75,7 @@ function removeUserFromScreen(userID) {
   const parentNode = document.getElementById("users");
   const childNodeToDelete = document.getElementById(userID);
   if (childNodeToDelete) {
-    parentNode.removeChild(childNodeToDelete[0]);
+    parentNode.removeChild(childNodeToDelete);
   }
 }
 </script>
