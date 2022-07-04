@@ -13,7 +13,6 @@
             <h1>Registration Form</h1>
         </header>
        <form onsubmit="savetoCrud(event)">
-        <br>
         <hr>
         <br />
             <label for="name">Name : </label>
@@ -30,18 +29,22 @@
 
 <script>
 
+// save to crudcrud api
 function savetoCrud(event){
+    // prevent page refreshing
     event.preventDefault();
+    // get user typed values
     const name = event.target.name.value
     const email= event.target.email.value
-    let url = ""
 
+    // store user typed values in object
     const obj = {
         name,email
     }
+    // send post request to save user typed values in crudcrud api with route appointmentData
     axios.post('https://crudcrud.com/api/bba6392c5cd442b591f5d1536c0f8940/appointmentData',obj) 
-    .then(response => console.log(response.data)
-    ).catch(error => console.log(error))
+    .then(response => showUsers(response.data) // show saved user data
+    ).catch(error => console.log(error)) // show error if any to console
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -55,15 +58,25 @@ window.addEventListener("DOMContentLoaded", () => {
     ).catch(err => console.log(err))
 })
 
+
+// show saved user data 
 function showUsers(user){ 
     const list = document.getElementById("users")
     const node =
     `<li id=${user._id}> ${user.name} - ${user.email}
     <button onclick=removeItems('${user._id}')> Delete </button>
-    <button> Edit </button></li>`
+    <button onclick=editUsers('${user._id}','${user.name}','${user.email}')> Edit </button></li>`
     list.innerHTML = list.innerHTML + node
 }
 
+// edit user data
+function editUsers(userID,name,email){
+    document.getElementById('email').value = email;
+    document.getElementById('name').value = name;
+    removeItems(userID)
+}
+
+// delete user data from api
 function removeItems(userID) {
   axios.delete(`https://crudcrud.com/api/bba6392c5cd442b591f5d1536c0f8940/appointmentData/${userID}`)
   .then(response => {
@@ -71,12 +84,16 @@ function removeItems(userID) {
   }).catch(err => console.log(err))
 }
 
+
+// delete user data from screen
 function removeUserFromScreen(userID) {
   const parentNode = document.getElementById("users");
   const childNodeToDelete = document.getElementById(userID);
-  if (childNodeToDelete) {
-    parentNode.removeChild(childNodeToDelete);
-  }
+
+    if (childNodeToDelete) {
+        parentNode.removeChild(childNodeToDelete);
+    }
+
 }
 </script>
 </html>
